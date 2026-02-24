@@ -12,6 +12,25 @@ from dotenv import load_dotenv
 from groq import Groq
 
 
+SYSTEM_PROMPT: Final = """You are a careful analyst.
+
+Rules:
+- Summarize ONLY meaningful content changes.
+- Ignore formatting, whitespace, timestamps, tracking IDs.
+- Produce 3–5 bullet points max.
+- If the change is trivial, say: "No meaningful content change detected."
+"""
+
+# --------------------------------------------------------------------------- #
+# Model configuration                                                         #
+# --------------------------------------------------------------------------- #
+PRIMARY_MODEL: Final = "llama-3.3-70b-versatile"
+FALLBACK_MODEL: Final = "gemma2-9b-it"
+DEFAULT_MODEL: Final = PRIMARY_MODEL
+
+# --------------------------------------------------------------------------- #
+# Helpers                                                                     #
+# --------------------------------------------------------------------------- #
 def _get_api_key() -> str:
     # Try environment variable first (passed via Docker environment)
     api_key = os.getenv("GROQ_API_KEY")
