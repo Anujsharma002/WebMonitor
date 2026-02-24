@@ -59,4 +59,4 @@
 ## 📎 Resume
 My full resume is available here:
 
-📄 **Anuj_Sharma_Resume.pdf** :contentReference[oaicite:0]{index=0}
+📄 **Anuj_Sharma_Resume.pdf** :[Anuj Sharma Resume](https://drive.google.com/file/d/1VPtLRXVUjTW0plBxPuuEOYhqE3M3oSvA/view?usp=sharing)
