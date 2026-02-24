@@ -4,21 +4,33 @@ This guide provides step-by-step instructions to deploy WebMonitor on AWS EC2 us
 
 ## 1. Prepare your EC2 Instance
 
-1. **OS**: Ubuntu 22.04 LTS.
+1. **OS**: Amazon Linux 2023 or Amazon Linux 2 (Recommended).
 2. **Security Group**:
    - **SSH (22)**: Allow from your IP.
    - **HTTP (80)**: Allow from anywhere.
 
-## 2. Server Setup (Docker)
+## 2. Server Setup (Docker on Amazon Linux)
 
 Connect to your EC2 and run:
 
 ```bash
 # Update and Install Docker
-sudo apt-get update && sudo apt-get upgrade -y
-curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh
+sudo dnf update -y
+sudo dnf install -y docker
+sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
-sudo apt-get install -y docker-compose-v2
+
+# Install Docker Compose (v2)
+sudo dnf install -y docker-compose-plugin
+
+# IMPORTANT: Amazon Linux t2.micro has only 1GB RAM. 
+# Build may fail without swap space. Let's add 2GB Swap:
+sudo dd if=/dev/zero of=/swapfile bs=128M count=16
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile swap swap defaults 0 0' | sudo tee -a /etc/fstab
+
 exit # Log out to apply permissions
 ```
 
