@@ -12,32 +12,17 @@ from dotenv import load_dotenv
 from groq import Groq
 
 
-ENV_PATH = Path(__file__).resolve().parent / ".env"
-load_dotenv(dotenv_path=ENV_PATH)
-
-SYSTEM_PROMPT: Final = """You are a careful analyst.
-
-Rules:
-- Summarize ONLY meaningful content changes.
-- Ignore formatting, whitespace, timestamps, tracking IDs.
-- Produce 3–5 bullet points max.
-- If the change is trivial, say: "No meaningful content change detected."
-"""
-
-# --------------------------------------------------------------------------- #
-# Model configuration                                                         #
-# --------------------------------------------------------------------------- #
-PRIMARY_MODEL: Final = "llama-3.3-70b-versatile"
-FALLBACK_MODEL: Final = "gemma2-9b-it"
-DEFAULT_MODEL: Final = PRIMARY_MODEL
-
-# --------------------------------------------------------------------------- #
-# Helpers                                                                     #
-# --------------------------------------------------------------------------- #
 def _get_api_key() -> str:
+    # Try environment variable first (passed via Docker environment)
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        raise RuntimeError("GROQ_API_KEY not set")
+        # Fallback to loading from .env if not in environment
+        load_dotenv()
+        api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key:
+        print("[ERROR] GROQ_API_KEY not found in environment or .env file", file=sys.stderr)
+        raise RuntimeError("GROQ_API_KEY not set. Check your .env file or Docker environment.")
     return api_key
 
 

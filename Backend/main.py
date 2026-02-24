@@ -172,9 +172,14 @@ def history(link_id: int):
 @app.get("/status")
 def status():
     try:
-        env = dotenv_values(".env")
-        ok = bool(env.get("GROQ_API_KEY"))
-        llm = "ok" if ok else "error: GROQ_API_KEY not set in .env"
+        # Check environment first, then .env
+        key = os.getenv("GROQ_API_KEY")
+        if not key:
+            load_dotenv()
+            key = os.getenv("GROQ_API_KEY")
+        
+        ok = bool(key)
+        llm = "ok" if ok else "error: GROQ_API_KEY not set"
     except Exception as e:
         llm = f"error: {e}"
 
