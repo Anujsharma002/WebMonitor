@@ -1,14 +1,32 @@
 version: '3.8'
 
 services:
-  webmonitor:
-    build: .
-    ports:
-      - "5173:5173"
-      - "8000:8000"
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
     environment:
       - GROQ_API_KEY=${GROQ_API_KEY}
     volumes:
-      - ./Backend/data.db:/app/Backend/data.db
-      - ./Backend/.env:/app/Backend/.env
+      - ./Backend/data.db:/app/data.db
+      - ./Backend/.env:/app/.env
+    restart: always
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    restart: always
+    # We'll proxy through nginx, so no need to expose port 80 here if using internal network
+    # but for simplicity we expose 80 to show it works.
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+      - frontend
     restart: always
