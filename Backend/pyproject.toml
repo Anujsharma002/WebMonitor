@@ -1,0 +1,17 @@
+[project]
+name = "webmonitor"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "fastapi>=0.131.0",
+    "google-genai>=1.64.0",
+    "google-generativeai>=0.8.6",
+    "groq>=1.0.0",
+    "httpx>=0.28.1",
+    "python-dotenv>=1.2.1",
+    "sqlalchemy>=2.0.46",
+    "uvicorn>=0.41.0",
+]
